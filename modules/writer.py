@@ -81,7 +81,7 @@ class Writer(Pinterest):
         try:
             self._log_message('[+] Writing prompted title...')
             tempToPrompt = results['Desc'] = row.get('Desc')
-            prompt = f"Crea un titulo llamativo simple de esta descripcion: {tempToPrompt} "
+            prompt = f"Crea un titulo llamativo simple apartir de esta descripcion con una maximo de 3 a 4 palabras: {tempToPrompt} "
             title = self.writeSinglePrompt(prompt)
             results['title'] = title.strip('"') if title else ''
             

@@ -23,7 +23,6 @@ class BaseImgGen(Pinterest):
         
         self.projectAssetsPath = os.path.join(self.projectPath,'assets')
         self.backgroundPath = os.path.join(self.projectAssetsPath,'backgrounds')
-        self.saveImagePath = os.path.join(self.projectPath,'pinterestPins')
         
         os.makedirs(self.saveImagePath,exist_ok=True)
         os.makedirs(self.backgroundPath,exist_ok=True)
@@ -166,7 +165,7 @@ class Template1ImgGen(BaseImgGen):
         self.canvas.save(imgName)
     
       
-        self.canvas.show()
+        # self.canvas.show()
         
 class Template2ImgGen(BaseImgGen):
     

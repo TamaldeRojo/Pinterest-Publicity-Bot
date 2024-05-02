@@ -1,5 +1,7 @@
 import csv
 import os
+import random
+from time import sleep
 
 import requests
 
@@ -7,9 +9,14 @@ class Pinterest:
     
     UPLOADING_DATA_FILE = 'uploadingData.csv'
     GENERATOR_DATA_FILE = 'generatorData.csv'
+    UPLOADED_FILE = 'uploated.csv'
     
     GENERATOR_MODE_1 = 'template1'
     GENERATOR_MODE_2 = 'template2'
+    
+    UPLOADER_MODE_1 = 'requests'
+    UPLOADER_MODE_2 = 'selenium'
+    
     
     def __init__(self,projectFolderName) -> None:
         self.projectPath = os.path.join(os.path.abspath('projects'),projectFolderName)
@@ -18,7 +25,8 @@ class Pinterest:
         
         self.assetsPath = os.path.join(self.projectPath,'assets')
         self.temuTemps = os.path.join(self.assetsPath,'temuTemps')
-        
+        self.saveImagePath = os.path.join(self.projectPath,'pinterestPins')
+
         os.makedirs(self.projectPath,exist_ok=True)
         # os.makedirs(self.promptsPath,exist_ok=True)
         os.makedirs(self.dataPath,exist_ok=True)
@@ -80,6 +88,11 @@ class Pinterest:
             writer.writerow(data)
         self._log_message(f'Data has been successfully written to {filename}.\n')
             
+    def _save_csv(rows_to_save, input_file):
+        with open(input_file, 'w', newline='') as file:
+            writer = csv.writer(file, delimiter=';')
+            writer.writerows(rows_to_save)
+
     @staticmethod
     def _writeHeader(filePath,header):
         with open(filePath,'a',encoding='utf-8',newline='') as f:
@@ -114,3 +127,26 @@ class Pinterest:
                 return ';'
             else:
                 return ','
+    
+    @staticmethod
+    def _random_delay(min_timeout, max_timeout, no_print=False):
+        time_out = random.uniform(min_timeout, max_timeout)
+        if not no_print:
+            print(f'\nTimeout {time_out} seconds...\n')
+        sleep(time_out)
+
+    
+    def _resetPins(self,rawPath):
+        try:
+            filepath = os.path.join(self.projectPath,rawPath)
+            with open(filepath, 'w', newline='') as csvfile:
+                pass  
+            print("[+] CSV file emptied successfully.")
+            
+            
+            for element in os.listdir(self.saveImagePath):
+                removeImg = os.path.join(self.saveImagePath,element)
+                os.remove(removeImg)
+            
+        except Exception as e:
+            print("[-] An error occurred:", e)
